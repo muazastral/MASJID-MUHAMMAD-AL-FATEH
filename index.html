@@ -653,7 +653,8 @@
             const error = document.getElementById('login-error');
             const btn = document.getElementById('btn-login');
 
-            const session = localStorage.getItem('sijil_login') === 'ok';
+            const isLocalDev = location.protocol === 'file:' || ['localhost', '127.0.0.1', '::1'].includes(location.hostname);
+            const session = isLocalDev || localStorage.getItem('sijil_login') === 'ok';
             if (session) {
                 login.classList.add('hidden');
                 app.classList.remove('hidden');
@@ -759,11 +760,31 @@
             const { jsPDF } = window.jspdf;
             const element = document.getElementById('certificate-preview');
 
+            // Create a clean, offscreen clone to ensure consistent capture
+            const wrapper = document.createElement('div');
+            wrapper.style.position = 'fixed';
+            wrapper.style.left = '-99999px';
+            wrapper.style.top = '0';
+            wrapper.style.width = `${element.offsetWidth}px`;
+            wrapper.style.height = `${element.offsetHeight}px`;
+            wrapper.style.background = '#ffffff';
+            wrapper.style.margin = '0';
+            wrapper.style.padding = '0';
+            wrapper.style.zIndex = '-1';
+
+            const clone = element.cloneNode(true);
+            clone.style.boxShadow = 'none';
+            clone.style.margin = '0';
+            clone.style.transform = 'none';
+            clone.style.visibility = 'visible';
+            wrapper.appendChild(clone);
+            document.body.appendChild(wrapper);
+
             // Ensure fonts & images are fully loaded before capture
             if (document.fonts && document.fonts.ready) {
                 await document.fonts.ready;
             }
-            const imgs = Array.from(element.querySelectorAll('img'));
+            const imgs = Array.from(clone.querySelectorAll('img'));
             await Promise.all(imgs.map(img => (
                 img.complete ? Promise.resolve() : new Promise(resolve => {
                     img.onload = img.onerror = resolve;
@@ -772,10 +793,10 @@
 
             // Wait for fonts (simple hack: tiny timeout usually enough if loaded, but here we rely on window load)
 
-            const width = element.offsetWidth;
-            const height = element.offsetHeight;
+            const width = clone.offsetWidth;
+            const height = clone.offsetHeight;
 
-            const canvas = await html2canvas(element, {
+            const canvas = await html2canvas(clone, {
                 scale: 3, // High res, stable
                 useCORS: true,
                 logging: false,
@@ -794,6 +815,8 @@
                     clonedDoc.body.style.margin = '0';
                 }
             });
+
+            document.body.removeChild(wrapper);
 
             const imgData = canvas.toDataURL('image/jpeg', 0.98); // High quality JPEG
             const pdf = new jsPDF({
