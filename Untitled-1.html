@@ -137,7 +137,10 @@
                             <div id="csv-status"
                                 class="hidden text-[10px] text-green-600 font-medium text-center bg-green-50 py-1 rounded">
                                 <span id="record-count">0</span> rekod dijumpai
-                            </div>
+                                        const safeMargin = 40;
+                                        const drawWidth = targetWidth - (safeMargin * 2);
+                                        const drawHeight = targetHeight - (safeMargin * 2);
+                                        if (key === 'name') {
                         </div>
                     </div>
 
@@ -805,7 +808,10 @@
             // A4 is 297mm x 210mm
             const pageWidth = pdf.internal.pageSize.getWidth();
             const pageHeight = pdf.internal.pageSize.getHeight();
-            pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight);
+            const safeMarginMm = 5;
+            const drawWidth = pageWidth - (safeMarginMm * 2);
+            const drawHeight = pageHeight - (safeMarginMm * 2);
+            pdf.addImage(imgData, 'JPEG', safeMarginMm, safeMarginMm, drawWidth, drawHeight);
 
             if (returnBlob) {
                 return pdf.output('blob');

@@ -265,6 +265,9 @@
                                 Naik<br>Logo</span>
                         </div>
                     </div>
+                    <div class="-mt-2 text-[7px] uppercase tracking-[0.2em] text-white/70 text-center">
+                        Masjid Muhammad Al-Fateh
+                    </div>
 
                     <!-- Vertical Text -->
                     <div class="flex-grow vertical-text-container">
@@ -760,6 +763,11 @@
             const { jsPDF } = window.jspdf;
             const element = document.getElementById('certificate-preview');
 
+            // Target A4 landscape at 300 DPI (px)
+            const targetWidth = 3508;
+            const targetHeight = 2480;
+            const scale = targetWidth / element.offsetWidth;
+
             // Create a clean, offscreen clone to ensure consistent capture
             const wrapper = document.createElement('div');
             wrapper.style.position = 'fixed';
@@ -767,7 +775,7 @@
             wrapper.style.top = '0';
             wrapper.style.width = `${element.offsetWidth}px`;
             wrapper.style.height = `${element.offsetHeight}px`;
-            wrapper.style.background = '#ffffff';
+            wrapper.style.background = '#F5F5F0';
             wrapper.style.margin = '0';
             wrapper.style.padding = '0';
             wrapper.style.zIndex = '-1';
@@ -777,6 +785,10 @@
             clone.style.margin = '0';
             clone.style.transform = 'none';
             clone.style.visibility = 'visible';
+            clone.style.width = `${element.offsetWidth}px`;
+            clone.style.height = `${element.offsetHeight}px`;
+            clone.style.backgroundColor = '#F5F5F0';
+            clone.style.overflow = 'hidden';
             wrapper.appendChild(clone);
             document.body.appendChild(wrapper);
 
@@ -797,10 +809,11 @@
             const height = clone.offsetHeight;
 
             const canvas = await html2canvas(clone, {
-                scale: 4, // Higher res for sharper text
+                scale,
                 useCORS: true,
                 logging: false,
                 backgroundColor: '#F5F5F0',
+                letterRendering: true,
                 width,
                 height,
                 windowWidth: width,
@@ -810,7 +823,7 @@
                     const el = clonedDoc.getElementById('certificate-preview');
                     el.style.visibility = 'visible';
                     el.style.transform = 'none'; // Reset any transforms
-                    el.style.backgroundColor = '#ffffff';
+                    el.style.backgroundColor = '#F5F5F0';
                     el.style.boxShadow = 'none';
                     clonedDoc.body.style.margin = '0';
                 }
@@ -818,17 +831,27 @@
 
             document.body.removeChild(wrapper);
 
-            const imgData = canvas.toDataURL('image/png');
+            const outputCanvas = document.createElement('canvas');
+            outputCanvas.width = targetWidth;
+            outputCanvas.height = targetHeight;
+            const ctx = outputCanvas.getContext('2d');
+            ctx.fillStyle = '#F5F5F0';
+            ctx.fillRect(0, 0, targetWidth, targetHeight);
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
+
+            const imgData = outputCanvas.toDataURL('image/png');
             const pdf = new jsPDF({
                 orientation: 'landscape',
-                unit: 'mm',
-                format: 'a4'
+                unit: 'px',
+                format: [targetWidth, targetHeight]
             });
 
-            // A4 is 297mm x 210mm
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight);
+            const safeMargin = 40;
+            const drawWidth = targetWidth - (safeMargin * 2);
+            const drawHeight = targetHeight - (safeMargin * 2);
+            pdf.addImage(imgData, 'PNG', safeMargin, safeMargin, drawWidth, drawHeight);
 
             if (returnBlob) {
                 return pdf.output('blob');
