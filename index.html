@@ -49,7 +49,7 @@
             height: 595px;
             /* 210mm */
             overflow: hidden;
-            background-color: #ffffff;
+            background-color: #F5F5F0;
             box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
         }
 
@@ -797,10 +797,10 @@
             const height = clone.offsetHeight;
 
             const canvas = await html2canvas(clone, {
-                scale: 3, // High res, stable
+                scale: 4, // Higher res for sharper text
                 useCORS: true,
                 logging: false,
-                backgroundColor: '#ffffff',
+                backgroundColor: '#F5F5F0',
                 width,
                 height,
                 windowWidth: width,
@@ -818,7 +818,7 @@
 
             document.body.removeChild(wrapper);
 
-            const imgData = canvas.toDataURL('image/jpeg', 0.98); // High quality JPEG
+            const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF({
                 orientation: 'landscape',
                 unit: 'mm',
@@ -828,7 +828,7 @@
             // A4 is 297mm x 210mm
             const pageWidth = pdf.internal.pageSize.getWidth();
             const pageHeight = pdf.internal.pageSize.getHeight();
-            pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight);
+            pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight);
 
             if (returnBlob) {
                 return pdf.output('blob');
