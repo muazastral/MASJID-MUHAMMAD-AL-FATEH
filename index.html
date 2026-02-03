@@ -187,7 +187,7 @@
                             <input type="url" id="input-verify-url"
                                 class="w-full text-xs p-2 border rounded bg-gray-50"
                                 placeholder="URL Pengesahan (auto)"
-                                value="https://muazastral.github.io/MASJID-MUHAMMAD-AL-FATEH/" readonly>
+                                value="https://muazastral.github.io/MASJID-MUHAMMAD-AL-FATEH/docs/verify.html" readonly>
                             <label class="flex items-center gap-2 text-xs text-gray-600">
                                 <input type="checkbox" id="toggle-qr" class="rounded" checked>
                                 Papar QR Code
@@ -205,6 +205,8 @@
                                 <button id="btn-delete-preset"
                                     class="text-xs font-bold bg-gray-200 text-gray-700 rounded px-2 py-2 hover:bg-gray-300">Padam Preset</button>
                             </div>
+                            <button id="btn-download-userlist"
+                                class="w-full text-xs font-bold bg-white border border-gray-200 rounded px-2 py-2 hover:bg-gray-50">Muat Turun userlist.json (untuk pengesahan)</button>
                         </div>
                     </div>
 
@@ -456,9 +458,61 @@
 
         function getBaseVerifyUrl() {
             if (window.location.origin && window.location.origin !== 'null') {
-                return `${window.location.origin}${window.location.pathname}`;
+                const basePath = window.location.pathname.replace(/\/[^\/]*$/, '/');
+                return `${window.location.origin}${basePath}docs/verify.html`;
             }
-            return 'https://muazastral.github.io/MASJID-MUHAMMAD-AL-FATEH/';
+            return 'https://muazastral.github.io/MASJID-MUHAMMAD-AL-FATEH/docs/verify.html';
+        }
+
+        function ensureVerifyForRow(row, index) {
+            const v = findVal(row, ['verify', 'verification', 'no sah', 'no pengesahan', 'verification number', 'no sijil sah']);
+            if (v) {
+                row.__verify = v;
+            } else if (!row.__verify) {
+                row.__verify = generateVerifyNumber();
+            }
+            if (!row.__id) {
+                row.__id = findVal(row, ['id', 'no', 'ref', 'ic', 'kp', 'matric', 'no ic', 'ic number', 'no.ic', 'noic']) || `S-${1000 + index}`;
+            }
+            if (!row.__name) {
+                row.__name = findVal(row, ['nama', 'name', 'peserta', 'recipient', 'full name', 'fullname']) || Object.values(row)[0] || '';
+            }
+            return row.__verify;
+        }
+
+        function buildUserList(data) {
+            return data.map((row, index) => {
+                ensureVerifyForRow(row, index);
+                return {
+                    name: row.__name || '',
+                    id: row.__id || '',
+                    verify: row.__verify || '',
+                    program: findVal(row, ['program', 'tajuk', 'title', 'course', 'kursus']) || '',
+                    date: findVal(row, ['tarikh', 'date', 'dated']) || '',
+                    hours: findVal(row, ['jam', 'hour', 'masa', 'duration', 'tempoh']) || ''
+                };
+            });
+        }
+
+        function saveUserList(list) {
+            localStorage.setItem('sijil_userlist', JSON.stringify(list));
+        }
+
+        function downloadUserList() {
+            const list = JSON.parse(localStorage.getItem('sijil_userlist') || '[]');
+            if (!list.length) {
+                alert('Tiada data. Sila muat naik CSV terlebih dahulu.');
+                return;
+            }
+            const blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'userlist.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         }
 
         // Sync Function
@@ -489,7 +543,7 @@
                     name: els.inputs.name.value,
                     id: els.inputs.id.value
                 });
-                const verifyUrl = `${baseUrl}#verify?${params.toString()}`;
+                const verifyUrl = `${baseUrl}?${params.toString()}`;
                 const encoded = encodeURIComponent(verifyUrl);
                 els.displays.qr.src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encoded}`;
             }
@@ -614,6 +668,10 @@
             presetList.value = name;
         });
 
+        document.getElementById('btn-download-userlist').addEventListener('click', () => {
+            downloadUserList();
+        });
+
         presetList.addEventListener('change', () => {
             const presets = getPresets();
             const data = presets[presetList.value];
@@ -715,6 +773,8 @@
                 complete: function (results) {
                     if (results.data && results.data.length > 0) {
                         csvData = results.data;
+                        const userList = buildUserList(csvData);
+                        saveUserList(userList);
                         document.getElementById('record-count').innerText = csvData.length;
                         document.getElementById('csv-status').classList.remove('hidden');
                         document.getElementById('btn-generate-bulk').disabled = false;

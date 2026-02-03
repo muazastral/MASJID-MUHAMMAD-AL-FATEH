@@ -190,7 +190,7 @@
                             <input type="url" id="input-verify-url"
                                 class="w-full text-xs p-2 border rounded bg-gray-50"
                                 placeholder="URL Pengesahan (auto)"
-                                value="https://muazastral.github.io/MASJID-MUHAMMAD-AL-FATEH/" readonly>
+                                value="https://muazastral.github.io/MASJID-MUHAMMAD-AL-FATEH/docs/verify.html" readonly>
                             <label class="flex items-center gap-2 text-xs text-gray-600">
                                 <input type="checkbox" id="toggle-qr" class="rounded" checked>
                                 Papar QR Code
@@ -456,9 +456,10 @@
 
         function getBaseVerifyUrl() {
             if (window.location.origin && window.location.origin !== 'null') {
-                return `${window.location.origin}${window.location.pathname}`;
+                const basePath = window.location.pathname.replace(/\/[^\/]*$/, '/');
+                return `${window.location.origin}${basePath}docs/verify.html`;
             }
-            return 'https://muazastral.github.io/MASJID-MUHAMMAD-AL-FATEH/';
+            return 'https://muazastral.github.io/MASJID-MUHAMMAD-AL-FATEH/docs/verify.html';
         }
 
         // Sync Function
@@ -489,7 +490,7 @@
                     name: els.inputs.name.value,
                     id: els.inputs.id.value
                 });
-                const verifyUrl = `${baseUrl}#verify?${params.toString()}`;
+                const verifyUrl = `${baseUrl}?${params.toString()}`;
                 const encoded = encodeURIComponent(verifyUrl);
                 els.displays.qr.src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encoded}`;
             }
