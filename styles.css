@@ -1,0 +1,363 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+    font-size: 1.2em;
+    opacity: 0.9;
+}
+
+.form-section {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.form-section h2 {
+    color: #2c5f2d;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: bold;
+    font-size: 0.95em;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #2c5f2d;
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background: #2c5f2d;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1f4520;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(44, 95, 45, 0.3);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #545b62;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.btn-info {
+    background: #17a2b8;
+    color: white;
+}
+
+.btn-info:hover {
+    background: #138496;
+}
+
+.certificate-preview {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.certificate-preview.active {
+    display: block;
+}
+
+.certificate-preview h2 {
+    color: #2c5f2d;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.certificate {
+    background: white;
+    margin: 20px auto;
+    max-width: 900px;
+}
+
+.certificate-border {
+    border: 15px solid #2c5f2d;
+    padding: 10px;
+    background: white;
+}
+
+.certificate-content {
+    border: 3px solid #d4af37;
+    padding: 40px;
+    background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+    position: relative;
+}
+
+.certificate-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-placeholder {
+    margin: 0 auto 15px;
+    width: 80px;
+    height: 80px;
+}
+
+.masjid-name {
+    font-size: 2.2em;
+    color: #2c5f2d;
+    margin-bottom: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.ornamental-line {
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(to right, transparent, #d4af37, transparent);
+    margin: 15px auto;
+}
+
+.certificate-body {
+    text-align: center;
+}
+
+.certificate-title {
+    font-size: 2em;
+    color: #2c5f2d;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.certificate-text {
+    font-size: 1.1em;
+    color: #333;
+    margin: 15px 0;
+}
+
+.recipient-name {
+    font-size: 2.5em;
+    color: #1f4520;
+    margin: 25px 0;
+    font-weight: bold;
+    font-style: italic;
+    border-bottom: 2px solid #d4af37;
+    display: inline-block;
+    padding: 0 30px 10px;
+}
+
+.course-title {
+    font-size: 1.6em;
+    color: #2c5f2d;
+    margin: 25px 0;
+    font-weight: bold;
+}
+
+.certificate-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 50px;
+    padding-top: 30px;
+}
+
+.signature-section {
+    text-align: center;
+    flex: 1;
+}
+
+.signature-line {
+    width: 200px;
+    height: 2px;
+    background: #333;
+    margin: 0 auto 10px;
+}
+
+.signature-label {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.instructor-name,
+.issue-date {
+    font-size: 0.95em;
+    color: #333;
+    font-weight: bold;
+}
+
+.seal-section {
+    flex: 0 0 auto;
+    padding: 0 20px;
+}
+
+.seal {
+    width: 100px;
+    height: 100px;
+}
+
+.certificate-number {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 30px;
+    font-style: italic;
+}
+
+.preview-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .form-section,
+    .preview-actions,
+    .certificate-preview h2,
+    header {
+        display: none !important;
+    }
+    
+    .certificate-preview {
+        display: block !important;
+        box-shadow: none;
+        padding: 0;
+    }
+    
+    .certificate {
+        max-width: 100%;
+        page-break-inside: avoid;
+    }
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.8em;
+    }
+    
+    .subtitle {
+        font-size: 1em;
+    }
+    
+    .form-section,
+    .certificate-preview {
+        padding: 20px;
+    }
+    
+    .certificate-content {
+        padding: 20px;
+    }
+    
+    .masjid-name {
+        font-size: 1.5em;
+    }
+    
+    .certificate-title {
+        font-size: 1.5em;
+    }
+    
+    .recipient-name {
+        font-size: 1.8em;
+    }
+    
+    .course-title {
+        font-size: 1.3em;
+    }
+    
+    .certificate-footer {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .signature-section {
+        width: 100%;
+    }
+    
+    .form-actions,
+    .preview-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}

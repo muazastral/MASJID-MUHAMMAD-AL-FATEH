@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Certificate - Masjid Muhammad Al-Fateh</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Masjid Muhammad Al-Fateh</h1>
+            <p class="subtitle">Electronic Certificate Generator</p>
+        </header>
+
+        <div class="form-section">
+            <h2>Certificate Details</h2>
+            <form id="certificateForm">
+                <div class="form-group">
+                    <label for="recipientName">Recipient Name *</label>
+                    <input type="text" id="recipientName" name="recipientName" required placeholder="Enter full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="courseTitle">Course/Program Title *</label>
+                    <input type="text" id="courseTitle" name="courseTitle" required placeholder="e.g., Quranic Studies, Islamic History">
+                </div>
+
+                <div class="form-group">
+                    <label for="completionDate">Completion Date *</label>
+                    <input type="date" id="completionDate" name="completionDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="certificateNumber">Certificate Number</label>
+                    <input type="text" id="certificateNumber" name="certificateNumber" placeholder="Auto-generated if left empty">
+                </div>
+
+                <div class="form-group">
+                    <label for="instructorName">Instructor Name</label>
+                    <input type="text" id="instructorName" name="instructorName" placeholder="Optional">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Generate Certificate</button>
+                    <button type="button" class="btn btn-secondary" id="resetBtn">Reset Form</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="certificate-preview" id="certificatePreview">
+            <h2>Certificate Preview</h2>
+            <div id="certificate" class="certificate">
+                <div class="certificate-border">
+                    <div class="certificate-content">
+                        <div class="certificate-header">
+                            <div class="logo-placeholder">
+                                <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="45" fill="#2c5f2d" opacity="0.1"/>
+                                    <path d="M50 20 L50 50 L70 35 Z" fill="#2c5f2d"/>
+                                    <circle cx="50" cy="50" r="35" fill="none" stroke="#2c5f2d" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <h1 class="masjid-name">Masjid Muhammad Al-Fateh</h1>
+                            <div class="ornamental-line"></div>
+                        </div>
+
+                        <div class="certificate-body">
+                            <h2 class="certificate-title">Certificate of Completion</h2>
+                            
+                            <p class="certificate-text">This is to certify that</p>
+                            
+                            <p class="recipient-name" id="certRecipientName">[Recipient Name]</p>
+                            
+                            <p class="certificate-text">has successfully completed</p>
+                            
+                            <p class="course-title" id="certCourseTitle">[Course Title]</p>
+                            
+                            <p class="certificate-text">on <span id="certCompletionDate">[Date]</span></p>
+                            
+                            <div class="certificate-footer">
+                                <div class="signature-section">
+                                    <div class="signature-line"></div>
+                                    <p class="signature-label">Authorized Signature</p>
+                                    <p class="instructor-name" id="certInstructorName"></p>
+                                </div>
+                                
+                                <div class="seal-section">
+                                    <div class="seal">
+                                        <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="#2c5f2d" stroke-width="3"/>
+                                            <circle cx="50" cy="50" r="35" fill="none" stroke="#2c5f2d" stroke-width="1"/>
+                                            <text x="50" y="45" font-size="12" fill="#2c5f2d" text-anchor="middle">MASJID</text>
+                                            <text x="50" y="60" font-size="8" fill="#2c5f2d" text-anchor="middle">AL-FATEH</text>
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <div class="signature-section">
+                                    <div class="signature-line"></div>
+                                    <p class="signature-label">Date of Issue</p>
+                                    <p class="issue-date" id="certIssueDate"></p>
+                                </div>
+                            </div>
+                            
+                            <p class="certificate-number" id="certNumber">Certificate No: [Number]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-actions">
+                <button type="button" class="btn btn-success" id="downloadBtn">Download Certificate (PNG)</button>
+                <button type="button" class="btn btn-info" id="printBtn">Print Certificate</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
